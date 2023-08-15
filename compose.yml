@@ -29,3 +29,17 @@ services:
       - ./docker/data/consul/config:/consul/config
     ports:
       - 8500:8500
+
+  setup:
+    image: vault:1.13.3
+    container_name: setup
+    environment:
+      VAULT_ADDR: "http://vault:8200"
+      VAULT_TOKEN: "easy"
+    depends_on:
+      - vault
+    links:
+      - vault
+    entrypoint: vault kv put secret/gs-vault-config example.username=demouser example.password=demopassword
+
+
